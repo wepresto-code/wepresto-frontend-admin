@@ -20,10 +20,12 @@ import Home from "./modules/main/views/Home";
 
 import Users from "./modules/user/views/Users";
 
-import Borrowers from "./modules/borrower/views/Borrowers";
 import Borrower from "./modules/borrower/views/Borrower";
+import BorrowerLoans from "./modules/loan/views/BorrowerLoans";
+
+import Loan from "./modules/loan/views/Loan";
+
 import BorrowerLoanCreate from "./modules/borrower/views/BorrowerLoanCreate";
-import BorrowerLoans from "./modules/borrower/views/BorrowerLoans";
 import BorrowerLoan from "./modules/borrower/views/BorrowerLoan";
 import BorrowerLoanMovements from "./modules/borrower/views/BorrowerLoanMovements";
 import BorrowerLoanPayment from "./modules/borrower/views/BorrowerLoanPayment";
@@ -73,12 +75,14 @@ const App = () => {
 
                 <Route path="/Users" element={<Users />} />
 
-                <Route path="/borrowers" element={<Borrowers />} />
-                <Route path="/borrowers/:authUid" element={<Borrower />} />
+                <Route path="/borrowers/:uid" element={<Borrower />} />
                 <Route
-                  path="/borrowers/:authUid/loans"
+                  path="/borrowers/:uid/loans"
                   element={<BorrowerLoans />}
                 />
+
+                <Route path="/loans/:uid" element={<Loan />} />
+
                 <Route
                   path="/borrowers/:authUid/loans/create"
                   element={<BorrowerLoanCreate />}

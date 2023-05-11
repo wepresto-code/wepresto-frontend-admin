@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   InlineNotification,
   Pagination,
@@ -9,9 +9,11 @@ import {
 } from "@carbon/react";
 import { View } from "@carbon/icons-react";
 
-import userService from "../../user.service";
+import loanService from "../../loan.service";
 
 import { delay, getMessageFromAxiosError } from "../../../../utils";
+import { formatCurrency } from "../../../../utils/format-concurrency";
+import { formatDate } from "../../../../utils/format-date";
 
 import BackButton from "../../../../components/BackButton";
 import AppDataTable from "../../../../components/AppDataTable";
@@ -20,40 +22,36 @@ import { GlobalContext } from "../../../../App.jsx";
 
 const headers = [
   {
-    key: "type",
-    header: "User type",
+    key: "alias",
+    header: "Alias"
   },
   {
-    key: "documentType",
-    header: "Document Type",
+    key: "amount",
+    header: "Amount"
   },
   {
-    key: "documentNumber",
-    header: "Document",
+    key: "annualInterestRate",
+    header: "A.I.R"
   },
   {
-    key: "fullName",
-    header: "Nombre",
+    key: "annualInterestOverdueRate",
+    header: "A.I.O.R"
   },
   {
-    key: "email",
-    header: "Email",
+    key: "term",
+    header: "Term",
   },
   {
-    key: "phoneNumber",
-    header: "Phone Number",
+    key: "startDate",
+    header: "Start Date",
   },
   {
-    key: "country",
-    header: "Country",
+    key: "status",
+    header: "Status",
   },
   {
-    key: "city",
-    header: "City",
-  },
-  {
-    key: "address",
-    header: "Address",
+    key: "comment",
+    header: "Comment",
   },
   {
     key: "actions",
@@ -61,27 +59,33 @@ const headers = [
   },
 ];
 
-const Users = () => {
-  const [users, setUsers] = useState([]);
-  const [usersLoading, setUsersLoading] = useState(true);
-  const [usersError, setUsersError] = useState("");
+const BorrowerLoans = () => {
+  const [loans, setLoans] = useState([]);
+  const [loansLoading, setLoansLoading] = useState(true);
+  const [loansError, setLoansError] = useState("");
 
   const [totalRows, setTotalRows] = useState(0);
   const [currentPageSize, setCurrentPageSize] = useState(10);
 
-  const [q, setQ] = useState("");
+  const [q, setQ] = useState(undefined);
 
   const ctx = useContext(GlobalContext);
   const navigate = useNavigate();
 
   const { user } = ctx;
 
+  const { uid } = useParams();
+
   const getRowItems = (rows) =>
     rows.map((row) => {
-      const type = row?.type.toLowerCase();
 
       return {
         ...row,
+        amount: formatCurrency(row.amount),
+        annualInterestRate: `${row.annualInterestRate * 100}%`,
+        annualInterestOverdueRate: `${row.annualInterestOverdueRate * 100}%`,
+        term: `${row.term} months`,
+        startDate: formatDate(new Date(row.startDate)),
 
         actions: (
           <IconButton
@@ -90,56 +94,56 @@ const Users = () => {
             label="View"
             renderIcon={View}
             iconDescription="View"
-            onClick={() => navigate(`/${type}s/${row[type]?.uid}`)}
+            onClick={() => navigate(`/loans/${row.uid}`)}
           />
         ),
       };
     });
 
-  const fetchUsers = async ({ q = "", take = undefined, skip = undefined }) => {
-    setUsersLoading(true);
+  const fetchLoans = async ({ borrowerUid = undefined,  q = undefined, take = undefined, skip = undefined }) => {
+    setLoansLoading(true);
 
     try {
-      const [{ count, users }] = await Promise.all([
-        userService.getMany({ q, take, skip }),
+      const [{ count, loans }] = await Promise.all([
+        loanService.getBorrowerLoans({ borrowerUid, q, take, skip }),
         delay(),
       ]);
 
       setTotalRows(count);
-      setUsers(getRowItems(users));
+      setLoans(getRowItems(loans));
     } catch (error) {
-      setUsersError(getMessageFromAxiosError(error));
+      setLoansError(getMessageFromAxiosError(error));
     }
 
-    setUsersLoading(false);
+    setLoansLoading(false);
   };
 
   useEffect(() => {
     if (!user) {
       return navigate("/");
     }
-    fetchUsers({ q, take: currentPageSize, skip: 0 });
-  }, [navigate, user]);
+    fetchLoans({ borrowerUid: uid, q, take: currentPageSize, skip: 0 });
+  }, [navigate, user, uid]);
   return (
     <div className="cds--grid">
       <div className="cds--row">
         <div className="cds--col-sm-4">
           <BackButton />
-          <h3 className="screen__heading">Users</h3>
-          {usersError && (
+          <h3 className="screen__heading">Borrower Loans</h3>
+          {loansError && (
             <div
               style={{ marginBottom: "1rem" }}
               className="screen__notification_container"
             >
               <InlineNotification
                 kind="error"
-                subtitle={usersError}
+                subtitle={loansError}
                 title="Uups!"
-                onClose={() => setUsersError("")}
+                onClose={() => setLoansError("")}
               />
             </div>
           )}
-          {!usersError && users && (
+          {!loansError && loans && (
             <>
               <div className="cds--row">
                 <div className="cds--col-lg-14 cds--col-sm-2">
@@ -160,8 +164,8 @@ const Users = () => {
                     size="md"
                     label=""
                     iconDescription=""
-                    onClick={() => fetchUsers({ q, take: currentPageSize })}
-                    disabled={usersLoading}
+                    onClick={() => fetchLoans({ borrowerUid: uid, q, take: currentPageSize })}
+                    disabled={loansLoading}
                     style={{ width: "inherit" }}
                   >
                     Search
@@ -169,10 +173,10 @@ const Users = () => {
                 </div>
               </div>
               <AppDataTable
-                title={"Users"}
-                description={"List of users"}
+                title={"Loans"}
+                description={"List of loans"}
                 headers={headers}
-                rows={users}
+                rows={loans}
               />
               <Pagination
                 totalItems={totalRows}
@@ -186,7 +190,7 @@ const Users = () => {
                     setCurrentPageSize(pageSize);
                   }
 
-                  fetchUsers({ q, take: pageSize, skip: pageSize * (page - 1) });
+                  fetchLoans({ borrowerUid: uid, q, take: pageSize, skip: pageSize * (page - 1) });
                 }}
                 size="sm"
               />
@@ -198,4 +202,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default BorrowerLoans;

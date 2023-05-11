@@ -123,7 +123,7 @@ export const delay = (ms) => {
 
 export const getMessageFromAxiosError = (error) => {
   // eslint-disable-next-line no-console
-  //console.log(error);
+  console.log(error);
   if (error.response) {
     const { data } = error.response;
 

@@ -5,6 +5,88 @@ import environment from "../../environment";
 import { getIdTokenFromCurrentUser, addMinutes } from "../../utils";
 
 class LoanService {
+  async getBorrowerLoans({ borrowerUid = undefined, q = undefined, take = undefined, skip = undefined }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}borrowers/loans`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        uid: borrowerUid,
+        q,
+        take,
+        skip,
+      },
+    });
+
+    const { count, data: loans } = data;
+
+    return {
+      count,
+      loans: loans.map((loan) => ({
+        ...loan,
+        id: "" + loan.id,
+      })),
+    };
+  }
+
+  async getOne({ uid }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/${uid}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return {
+      ...data,
+    };
+  }
+
+  async getMinimumPaymentAmount({ uid }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/minimum-payment-amount`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        uid,
+      },
+    });
+
+    return {
+      ...data,
+    };
+  }
+
+  async getTotalPaymentAmount({ uid }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/total-payment-amount`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        uid,
+      },
+    });
+
+    return {
+      ...data,
+    };
+  }
+
   async getOverview() {
     const token = await getIdTokenFromCurrentUser();
 
@@ -19,28 +101,6 @@ class LoanService {
     return {
       ...data,
     };
-  }
-
-  async getUserLoans({ userAuthUid, limit = undefined }) {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}loans/user-loans/${userAuthUid}`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      params: {
-        limit: limit,
-      },
-    });
-
-    return data.map((item) => {
-      return {
-        ...item,
-        id: "" + item.id,
-      };
-    });
   }
 
   async getLoanDetails({ uid }) {
@@ -62,9 +122,6 @@ class LoanService {
 
   async createEpaycoTransaction({ uid, amount }) {
     const token = await getIdTokenFromCurrentUser();
-
-    // eslint-disable-next-line no-console
-    console.log("amount", Math.ceil(amount));
 
     const { data } = await axios({
       url: `${environment.API_URL}epayco-transactions`,

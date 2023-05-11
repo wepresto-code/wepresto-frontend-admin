@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { InlineLoading, InlineNotification, Button } from "@carbon/react";
-import { View } from "@carbon/icons-react";
+import { List } from "@carbon/icons-react";
 
-import userService from "../../../user/user.service";
+import borrowerService from "../../borrower.service";
 
 import { delay, getMessageFromAxiosError } from "../../../../utils";
 
@@ -21,14 +21,14 @@ const Borrower = () => {
 
   const { user } = ctx;
 
-  const { authUid } = useParams();
+  const { uid } = useParams();
 
-  const fetchBorrower = async ({ userAuthUid }) => {
+  const fetchBorrower = async ({ uid }) => {
     setBorrowerLoading(true);
 
     try {
       const [data] = await Promise.all([
-        userService.getOne({ authUid: userAuthUid }),
+        borrowerService.getOne({ uid }),
         delay(),
       ]);
 
@@ -45,12 +45,12 @@ const Borrower = () => {
       return navigate("/");
     }
 
-    fetchBorrower({ userAuthUid: authUid });
-  }, [navigate, user, authUid]);
+    fetchBorrower({ uid });
+  }, [navigate, user, uid]);
   return (
     <div className="cds--grid">
       <div className="cds--row">
-        <div className="cds--offset-lg-5 cds--col-lg-6 cds--col-md-8 cds--col-sm-4">
+        <div className="cds--col-sm-4">
           <BackButton />
           {borrowerLoading && (
             <InlineLoading
@@ -73,30 +73,20 @@ const Borrower = () => {
           )}
           {!borrowerLoading && !borrowerError && borrower && (
             <>
-              <h3 className="screen__heading">{borrower?.fullName}</h3>
+              <h3 className="screen__heading">{borrower?.uid}</h3>
               <div style={{ marginBottom: "1rem" }}>
                 <div className="cds--row">
                   <div className="cds--col">
-                    <p className="screen__label">Número de identificación</p>
-                    <p>{borrower?.documentNumber}</p>
+                    <p className="screen__label">ID</p>
+                    <p>{borrower?.id}</p>
                   </div>
-                </div>
-                <div className="cds--row">
                   <div className="cds--col">
-                    <p className="screen__label">Email</p>
-                    <p>{borrower?.email}</p>
+                    <p className="screen__label">Created at</p>
+                    <p>{borrower?.createdAt}</p>
                   </div>
-                </div>
-                <div className="cds--row">
                   <div className="cds--col">
-                    <p className="screen__label">Télefono</p>
-                    <p>{borrower?.phone}</p>
-                  </div>
-                </div>
-                <div className="cds--row">
-                  <div className="cds--col">
-                    <p className="screen__label">Dirección</p>
-                    <p>{borrower?.address}</p>
+                    <p className="screen__label">Updated at</p>
+                    <p>{borrower?.updatedAt}</p>
                   </div>
                 </div>
               </div>
@@ -109,26 +99,11 @@ const Borrower = () => {
                       size="sm"
                       label="Ver los préstamos"
                       iconDescription="Ver los préstamos"
-                      renderIcon={View}
-                      onClick={() => navigate(`/borrowers/${authUid}/loans`)}
+                      renderIcon={List}
+                      onClick={() => navigate(`/borrowers/${uid}/loans`)}
                       className="screen__centered_button"
                     >
-                      Prestamos
-                    </Button>
-                  </div>
-                  <div className="cds--col screen__centered_button_container">
-                    <Button
-                      kind="ghost"
-                      size="sm"
-                      label="Ver las solicitudes"
-                      iconDescription="Ver las solicitudes"
-                      renderIcon={View}
-                      onClick={() =>
-                        navigate(`/borrowers/${authUid}/loan-requests`)
-                      }
-                      className="screen__centered_button"
-                    >
-                      Solicitudes
+                      Loans
                     </Button>
                   </div>
                 </div>
