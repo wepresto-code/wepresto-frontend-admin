@@ -21,7 +21,7 @@ class UserService {
       },
     });
 
-    const { count, data: users } = data;
+    const { count, users } = data;
 
     return {
       count,

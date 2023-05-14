@@ -164,7 +164,7 @@ const Loan = () => {
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Start date</p>
-                    <p>{formatDate(new Date(loan?.startDate))}</p>
+                    <p>{loan?.startDate ? formatDate(new Date(loan?.startDate)) : "-"}</p>
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Status</p>
@@ -172,7 +172,7 @@ const Loan = () => {
                   </div>
                   <div className="cds--col-lg-16 cds--col-sm-4">
                     <p className="screen__label">Comment</p>
-                    <p>{loan?.comment}</p>
+                    <p>{loan?.comment ? loan?.comment : "-"}</p>
                   </div>
                   {loan.status === environment.DISBURSED_LOAN_STATUS && (
                     <>
@@ -429,7 +429,7 @@ const Loan = () => {
                         label="View movements"
                         iconDescription="View movements"
                         renderIcon={List}
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate(`/loans/${uid}/movements`)}
                         className="screen__centered_button"
                       >
                         Movements
