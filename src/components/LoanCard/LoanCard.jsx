@@ -31,7 +31,7 @@ const LoanCard = ({
           <div className="cds--col-lg-8 cds--col-md-4 cds--col-sm-2">
             <p className="loan-card__label">Fecha de pago</p>
             <p className="loan-card__payment_date">
-              {formatDate(loanPaymentDate)}
+              {formatDate(loanPaymentDate, "UTC")}
             </p>
           </div>
           <div

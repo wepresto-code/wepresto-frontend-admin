@@ -8,7 +8,9 @@ import {
   DatePicker,
   DatePickerInput,
   NumberInput,
+  IconButton,
 } from "@carbon/react";
+import { View } from "@carbon/icons-react";
 
 import environment from "../../../../environment";
 
@@ -34,7 +36,7 @@ const headers = [
   },
   {
     key: "movementDate",
-    header: "Movement Date",
+    header: "M. Date",
   },
   {
     key: "amount",
@@ -57,16 +59,16 @@ const headers = [
     header: "Processed",
   },
   {
+    key: "proofURL",
+    header: "Proof",
+  },
+  {
     key: "createdAt",
     header: "Created At",
   },
   {
     key: "updatedAt",
     header: "Updated At",
-  },
-  {
-    key: "actions",
-    header: "Actions",
   },
 ];
 
@@ -120,12 +122,28 @@ const LoanMovements = () => {
         amount: formatCurrency(row.amount),
         interest: row.interest ? formatCurrency(row.interest) : "-",
         principal: row.principal ? formatCurrency(row.principal) : "-",
-        dueDate: row.dueDate ? formatDate(new Date(row.dueDate)) : "-",
+        dueDate: row.dueDate ? formatDate(new Date(row.dueDate), "UTC") : "-",
         movementDate: row.movementDate
-          ? formatDate(new Date(row.movementDate))
+          ? formatDate(new Date(row.movementDate), "UTC")
           : "-",
         paid: row.paid ? row.paid : "-",
         processed: row.processed ? row.processed : "-",
+        proofURL: row.proofURL ? (
+          <IconButton
+            kind="ghost"
+            size="sm"
+            label="Ver"
+            iconDescription="Ver"
+            renderIcon={View}
+            onClick={() => {
+              window.open(row.proofURL, "_blank");
+            }}
+          />
+        ) : (
+          "-"
+        ),
+        createdAt: formatDate(new Date(row.createdAt), "UTC"),
+        updatedAt: formatDate(new Date(row.updatedAt), "UTC"),
       };
     });
 
@@ -270,7 +288,14 @@ const LoanMovements = () => {
                     onChange={(e) => setEndAmount(e.target.value)}
                   />
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end" }} className="cds--col-lg-2 cds--col-sm-4">
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-end",
+                  }}
+                  className="cds--col-lg-2 cds--col-sm-4"
+                >
                   <Button
                     kind="primary"
                     size="sm"
@@ -288,7 +313,11 @@ const LoanMovements = () => {
                       })
                     }
                     disabled={movementsLoading}
-                    style={{ width: "inherit", marginBottom: "0.1rem", minWidth: "100%" }}
+                    style={{
+                      width: "inherit",
+                      marginBottom: "0.1rem",
+                      minWidth: "100%",
+                    }}
                   >
                     Search
                   </Button>

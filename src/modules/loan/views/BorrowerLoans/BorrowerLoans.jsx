@@ -85,7 +85,7 @@ const BorrowerLoans = () => {
         annualInterestRate: `${row.annualInterestRate * 100}%`,
         annualInterestOverdueRate: `${row.annualInterestOverdueRate * 100}%`,
         term: `${row.term} months`,
-        startDate: formatDate(new Date(row.startDate)),
+        startDate: formatDate(new Date(row.startDate), "UTC"),
 
         actions: (
           <IconButton

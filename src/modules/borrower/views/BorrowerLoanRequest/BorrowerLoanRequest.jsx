@@ -209,7 +209,7 @@ const BorrowerLoanRequest = () => {
                         Fecha de solicitud
                       </p>
                       <p className="screen__text--center">
-                        {formatDate(loanRequestDetails?.createdAt)}
+                        {formatDate(loanRequestDetails?.createdAt, "UTC")}
                       </p>
                     </div>
                   </div>

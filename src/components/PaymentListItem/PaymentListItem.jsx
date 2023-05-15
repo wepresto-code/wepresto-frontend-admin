@@ -13,7 +13,7 @@ const LoanCard = ({ amount, at }) => {
             </p>
           </div>
           <div className="cds--col-lg-8 cds--col-md-4 cds--col-sm-2">
-            <p className="loan-details__payment_date">{formatDate(at)}</p>
+            <p className="loan-details__payment_date">{formatDate(at, "UTC")}</p>
           </div>
         </div>
       </div>

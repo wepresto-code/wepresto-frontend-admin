@@ -71,7 +71,7 @@ const BorrowerLoans = () => {
         ...row,
         amount: formatCurrency(row?.amount),
         minimumLoanPaymentAmount: formatCurrency(row?.minimumLoanPaymentAmount),
-        loanPaymentDate: formatDate(row?.loanPaymentDate),
+        loanPaymentDate: formatDate(row?.loanPaymentDate, "UTC"),
         loanPaymentStatus: (
           <span style={{ color }}>{row?.loanPaymentStatus}</span>
         ),

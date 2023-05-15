@@ -70,7 +70,7 @@ const Loan = () => {
       return {
         ...row,
         id: "" + row.id,
-        dueDate: formatDate(new Date(row.dueDate)),
+        dueDate: formatDate(new Date(row.dueDate), "UTC"),
         amount: formatCurrency(row.amount),
         principal: row.principal ? formatCurrency(row.principal) : "-",
         interest: row.interest ? formatCurrency(row.interest) : "-",
@@ -164,7 +164,7 @@ const Loan = () => {
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Start date</p>
-                    <p>{loan?.startDate ? formatDate(new Date(loan?.startDate)) : "-"}</p>
+                    <p>{loan?.startDate ? formatDate(new Date(loan?.startDate), "UTC") : "-"}</p>
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Status</p>
@@ -230,7 +230,8 @@ const Loan = () => {
                         <p>
                           {minimumPaymentInfo?.paymentDate
                             ? formatDate(
-                                new Date(minimumPaymentInfo?.paymentDate)
+                                new Date(minimumPaymentInfo?.paymentDate),
+                                "UTC"
                               )
                             : "-"}
                         </p>
@@ -316,7 +317,8 @@ const Loan = () => {
                         <p>
                           {totalPaymentInfo?.paymentDate
                             ? formatDate(
-                                new Date(totalPaymentInfo?.paymentDate)
+                                new Date(totalPaymentInfo?.paymentDate),
+                                "UTC"
                               )
                             : "-"}
                         </p>

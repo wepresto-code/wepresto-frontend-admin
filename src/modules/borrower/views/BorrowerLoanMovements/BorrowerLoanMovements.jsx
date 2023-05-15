@@ -45,7 +45,7 @@ const getRowItems = (rows) =>
     return {
       ...row,
       id: "" + row.id,
-      at: formatDate(row.at),
+      at: formatDate(row.at, "UTC"),
       amount: <span style={{ color }}>{amountToRender}</span>,
     };
   });

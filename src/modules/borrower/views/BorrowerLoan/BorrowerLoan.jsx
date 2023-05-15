@@ -108,7 +108,7 @@ const BorrowerLoan = () => {
                       Fecha de pago
                     </p>
                     <p className="screen__text--center">
-                      {formatDate(loanDetails.loanPaymentDate)}
+                      {formatDate(loanDetails.loanPaymentDate, "UTC")}
                     </p>
                   </div>
                 </div>
