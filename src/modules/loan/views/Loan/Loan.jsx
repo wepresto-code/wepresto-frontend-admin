@@ -6,7 +6,14 @@ import {
   Button,
   Pagination,
 } from "@carbon/react";
-import { List, Currency, Review, Close, Checkmark, Finance } from "@carbon/icons-react";
+import {
+  List,
+  Currency,
+  Review,
+  Close,
+  Checkmark,
+  Finance,
+} from "@carbon/icons-react";
 
 import environment from "../../../../environment";
 
@@ -16,7 +23,7 @@ import BackButton from "../../../../components/BackButton";
 import AppDataTable from "../../../../components/AppDataTable";
 
 import { delay, getMessageFromAxiosError } from "../../../../utils";
-import { formatCurrency } from "../../../../utils/format-concurrency";
+import { formatCurrency } from "../../../../utils/format-currency";
 import { formatDate } from "../../../../utils/format-date";
 import { approximateToTwoDecimals } from "../../../../utils/approximate-to-two-decimals";
 
@@ -109,8 +116,8 @@ const Loan = () => {
   return (
     <div className="cds--grid">
       <div className="cds--row">
+        <BackButton />
         <div className="cds--col-sm-4">
-          <BackButton />
           {loanLoading && (
             <InlineLoading
               status="active"
@@ -135,12 +142,16 @@ const Loan = () => {
           )}
           {!loanLoading && !loanError && loan && (
             <>
-              <h3 className="screen__heading">{loan?.uid}</h3>
+              <h3 className="screen__heading">Loan Details</h3>
               <div style={{ marginBottom: "1rem" }}>
                 <div className="cds--row">
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">ID</p>
                     <p>{loan?.id}</p>
+                  </div>
+                  <div className="cds--col-lg-2 cds--col-sm-4">
+                    <p className="screen__label">UID</p>
+                    <p>{loan?.uid}</p>
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Alias</p>
@@ -164,13 +175,17 @@ const Loan = () => {
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Start date</p>
-                    <p>{loan?.startDate ? formatDate(new Date(loan?.startDate), "UTC") : "-"}</p>
+                    <p>
+                      {loan?.startDate
+                        ? formatDate(new Date(loan?.startDate), "UTC")
+                        : "-"}
+                    </p>
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Status</p>
                     <p>{loan?.status}</p>
                   </div>
-                  <div className="cds--col-lg-16 cds--col-sm-4">
+                  <div className="cds--col-lg-14 cds--col-sm-4">
                     <p className="screen__label">Comment</p>
                     <p>{loan?.comment ? loan?.comment : "-"}</p>
                   </div>
@@ -446,7 +461,7 @@ const Loan = () => {
                         label="Report payment"
                         iconDescription="Report payment"
                         renderIcon={Currency}
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate(`/loans/${uid}/payment`)}
                         className="screen__centered_button"
                       >
                         Report payment

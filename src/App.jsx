@@ -26,6 +26,7 @@ import BorrowerLoans from "./modules/loan/views/BorrowerLoans";
 import Loan from "./modules/loan/views/Loan";
 
 import LoanMovements from "./modules/movement/views/LoanMovements";
+import CreatePayment from "./modules/movement/CreatePayment";
 
 import BorrowerLoanCreate from "./modules/borrower/views/BorrowerLoanCreate";
 import BorrowerLoan from "./modules/borrower/views/BorrowerLoan";
@@ -86,6 +87,8 @@ const App = () => {
                 <Route path="/loans/:uid" element={<Loan />} />
 
                 <Route path="/loans/:uid/movements" element={<LoanMovements />} />
+
+                <Route path="/loans/:uid/payment" element={<CreatePayment />} />
 
                 <Route
                   path="/borrowers/:authUid/loans/create"

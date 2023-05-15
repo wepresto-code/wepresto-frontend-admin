@@ -50,8 +50,8 @@ const Borrower = () => {
   return (
     <div className="cds--grid">
       <div className="cds--row">
+        <BackButton />
         <div className="cds--col-sm-4">
-          <BackButton />
           {borrowerLoading && (
             <InlineLoading
               status="active"
@@ -73,12 +73,16 @@ const Borrower = () => {
           )}
           {!borrowerLoading && !borrowerError && borrower && (
             <>
-              <h3 className="screen__heading">{borrower?.uid}</h3>
+              <h3 className="screen__heading">Borrower Details</h3>
               <div style={{ marginBottom: "1rem" }}>
                 <div className="cds--row">
                   <div className="cds--col">
                     <p className="screen__label">ID</p>
                     <p>{borrower?.id}</p>
+                  </div>
+                  <div className="cds--col">
+                    <p className="screen__label">UID</p>
+                    <p>{borrower?.uid}</p>
                   </div>
                   <div className="cds--col">
                     <p className="screen__label">Created at</p>

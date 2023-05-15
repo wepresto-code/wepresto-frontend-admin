@@ -12,7 +12,7 @@ import { View } from "@carbon/icons-react";
 import loanService from "../../loan.service";
 
 import { delay, getMessageFromAxiosError } from "../../../../utils";
-import { formatCurrency } from "../../../../utils/format-concurrency";
+import { formatCurrency } from "../../../../utils/format-currency";
 import { formatDate } from "../../../../utils/format-date";
 
 import BackButton from "../../../../components/BackButton";
@@ -23,19 +23,19 @@ import { GlobalContext } from "../../../../App.jsx";
 const headers = [
   {
     key: "alias",
-    header: "Alias"
+    header: "Alias",
   },
   {
     key: "amount",
-    header: "Amount"
+    header: "Amount",
   },
   {
     key: "annualInterestRate",
-    header: "A.I.R"
+    header: "A.I.R",
   },
   {
     key: "annualInterestOverdueRate",
-    header: "A.I.O.R"
+    header: "A.I.O.R",
   },
   {
     key: "term",
@@ -78,7 +78,6 @@ const BorrowerLoans = () => {
 
   const getRowItems = (rows) =>
     rows.map((row) => {
-
       return {
         ...row,
         amount: formatCurrency(row.amount),
@@ -100,7 +99,12 @@ const BorrowerLoans = () => {
       };
     });
 
-  const fetchLoans = async ({ borrowerUid = undefined,  q = undefined, take = undefined, skip = undefined }) => {
+  const fetchLoans = async ({
+    borrowerUid = undefined,
+    q = undefined,
+    take = undefined,
+    skip = undefined,
+  }) => {
     setLoansLoading(true);
 
     try {
@@ -127,8 +131,8 @@ const BorrowerLoans = () => {
   return (
     <div className="cds--grid">
       <div className="cds--row">
+        <BackButton />
         <div className="cds--col-sm-4">
-          <BackButton />
           <h3 className="screen__heading">Borrower Loans</h3>
           {loansError && (
             <div
@@ -164,7 +168,9 @@ const BorrowerLoans = () => {
                     size="md"
                     label=""
                     iconDescription=""
-                    onClick={() => fetchLoans({ borrowerUid: uid, q, take: currentPageSize })}
+                    onClick={() =>
+                      fetchLoans({ borrowerUid: uid, q, take: currentPageSize })
+                    }
                     disabled={loansLoading}
                     style={{ width: "inherit" }}
                   >
@@ -190,7 +196,12 @@ const BorrowerLoans = () => {
                     setCurrentPageSize(pageSize);
                   }
 
-                  fetchLoans({ borrowerUid: uid, q, take: pageSize, skip: pageSize * (page - 1) });
+                  fetchLoans({
+                    borrowerUid: uid,
+                    q,
+                    take: pageSize,
+                    skip: pageSize * (page - 1),
+                  });
                 }}
                 size="sm"
               />

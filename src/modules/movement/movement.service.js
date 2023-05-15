@@ -46,6 +46,30 @@ class MovementService {
     };
   }
 
+  async createPayment({ loanUid, amount, paymentDate, file }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const formData = new FormData();
+    formData.append("loanUid", loanUid);
+    formData.append("amount", amount);
+    formData.append("paymentDate", paymentDate);
+    if (file) formData.append("file", file);
+
+    const { data } = await axios({
+      url: `${environment.API_URL}movements/payment`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: formData,
+    });
+
+    return {
+      ...data,
+      message: "Payment created successfully",
+    };
+  }
+
   async getLoanPayments({ uid, limit = undefined }) {
     const token = await getIdTokenFromCurrentUser();
 
@@ -67,28 +91,6 @@ class MovementService {
         at: addMinutes(item.at, 5 * 60),
       };
     });
-  }
-
-  async createPayment({ loanUid, amount, paymentDate }) {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}movements/payment`,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        loanUid,
-        amount,
-        paymentDate,
-      },
-    });
-
-    return {
-      ...data,
-      message: "Pago creado correctamente",
-    };
   }
 }
 

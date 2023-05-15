@@ -123,8 +123,8 @@ const Users = () => {
   return (
     <div className="cds--grid">
       <div className="cds--row">
+        <BackButton />
         <div className="cds--col-sm-4">
-          <BackButton />
           <h3 className="screen__heading">Users</h3>
           {usersError && (
             <div
@@ -186,7 +186,11 @@ const Users = () => {
                     setCurrentPageSize(pageSize);
                   }
 
-                  fetchUsers({ q, take: pageSize, skip: pageSize * (page - 1) });
+                  fetchUsers({
+                    q,
+                    take: pageSize,
+                    skip: pageSize * (page - 1),
+                  });
                 }}
                 size="sm"
               />

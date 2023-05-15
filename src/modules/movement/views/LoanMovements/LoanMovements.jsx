@@ -17,7 +17,7 @@ import environment from "../../../../environment";
 import movementService from "../../movement.service";
 
 import { delay, getMessageFromAxiosError } from "../../../../utils";
-import { formatCurrency } from "../../../../utils/format-concurrency";
+import { formatCurrency } from "../../../../utils/format-currency";
 import { formatDate } from "../../../../utils/format-date";
 
 import BackButton from "../../../../components/BackButton";
@@ -212,8 +212,8 @@ const LoanMovements = () => {
   return (
     <div className="cds--grid">
       <div className="cds--row">
+        <BackButton />
         <div className="cds--col-sm-4">
-          <BackButton />
           <h3 className="screen__heading">Loan Movements</h3>
           {movementsError && (
             <div
