@@ -10,16 +10,16 @@ import {
   FileUploader,
 } from "@carbon/react";
 
-import environment from "../../../environment";
+import environment from "../../../../environment";
 
-import movementService from "../movement.service";
+import movementService from "../../movement.service";
 
-import { getMessageFromAxiosError } from "../../../utils";
-import { formatCurrency } from "../../../utils/format-currency";
+import { getMessageFromAxiosError } from "../../../../utils";
+import { formatCurrency } from "../../../../utils/format-currency";
 
-import BackButton from "../../../components/BackButton";
+import BackButton from "../../../../components/BackButton";
 
-import { GlobalContext } from "../../../App.jsx";
+import { GlobalContext } from "../../../../App.jsx";
 
 const CreatePayment = () => {
   const [amount, setAmount] = useState(undefined);
@@ -27,9 +27,9 @@ const CreatePayment = () => {
   const [paymentDate, setPaymentDate] = useState(undefined);
   const [file, setFile] = useState(undefined);
 
-  const [reportPaymentLoading, setReportPaymentLoading] = useState(false);
-  const [reportPaymentError, setReportPaymentError] = useState(undefined);
-  const [reportPaymentMessage, setReportPaymentMessage] = useState(undefined);
+  const [createPaymentLoading, setCreatePaymentLoading] = useState(false);
+  const [createPaymentError, setCreatePaymentError] = useState(undefined);
+  const [createPaymentMessage, setCreatePaymentMessage] = useState(undefined);
 
   const ctx = useContext(GlobalContext);
   const navigate = useNavigate();
@@ -54,7 +54,7 @@ const CreatePayment = () => {
     }
   };
 
-  const handleReportPaymentSubmit = async (event) => {
+  const handleCreatePaymentSubmit = async (event) => {
     event.preventDefault();
 
     if (!amount || amount.trim().length === 0) {
@@ -73,12 +73,12 @@ const CreatePayment = () => {
     if (file) {
       const { size } = file;
       if (size > environment.MAX_PROOF_FILE_SIZE) {
-        setReportPaymentError("The file size is too big");
+        setCreatePaymentError("The file size is too big");
         return;
       }
     }
 
-    setReportPaymentLoading(true);
+    setCreatePaymentLoading(true);
 
     try {
       const { message } = await movementService.createPayment({
@@ -88,7 +88,7 @@ const CreatePayment = () => {
         file,
       });
 
-      setReportPaymentMessage(message);
+      setCreatePaymentMessage(message);
 
       // clean the values of the form
       document.getElementById("paymentDate").value = "";
@@ -97,10 +97,10 @@ const CreatePayment = () => {
       setAmount(undefined);
       setFile(undefined);
     } catch (error) {
-      setReportPaymentError(getMessageFromAxiosError(error));
+      setCreatePaymentError(getMessageFromAxiosError(error));
     }
 
-    setReportPaymentLoading(false);
+    setCreatePaymentLoading(false);
   };
 
   return (
@@ -109,7 +109,7 @@ const CreatePayment = () => {
         <BackButton />
         <div className="cds--offset-lg-5 cds--col-lg-6 cds--col-md-8 cds--col-sm-4">
           <h3 className="screen__heading">Payment Creation</h3>
-          <Form onSubmit={handleReportPaymentSubmit}>
+          <Form onSubmit={handleCreatePaymentSubmit}>
             <div style={{ marginBottom: "1rem" }}>
               <TextInput
                 id="amount"
@@ -132,7 +132,7 @@ const CreatePayment = () => {
                   placeholder="mm/dd/yyyy"
                   labelText="Date"
                   type="text"
-                  invalidText="Valor inválido"
+                  invalidText="Invalid value"
                   autoComplete="off"
                 />
               </DatePicker>
@@ -154,29 +154,29 @@ const CreatePayment = () => {
                 onDelete={() => setFile(undefined)}
               />
             </div>
-            {reportPaymentError && (
+            {createPaymentError && (
               <div
                 style={{ marginBottom: "1rem" }}
                 className="screen__notification_container"
               >
                 <InlineNotification
                   kind="error"
-                  subtitle={<span>{reportPaymentError}</span>}
+                  subtitle={<span>{createPaymentError}</span>}
                   title="Uups!"
-                  onClose={() => setReportPaymentError(undefined)}
+                  onClose={() => setCreatePaymentError(undefined)}
                 />
               </div>
             )}
-            {reportPaymentMessage && (
+            {createPaymentMessage && (
               <div
                 style={{ marginBottom: "1rem" }}
                 className="screen__notification_container"
               >
                 <InlineNotification
                   kind="success"
-                  subtitle={<span>{reportPaymentMessage}</span>}
+                  subtitle={<span>{createPaymentMessage}</span>}
                   title="Cool!"
-                  onClose={() => setReportPaymentMessage(undefined)}
+                  onClose={() => setCreatePaymentMessage(undefined)}
                 />
               </div>
             )}
@@ -185,9 +185,9 @@ const CreatePayment = () => {
                 className="btn-block"
                 type="submit"
                 size="sm"
-                disabled={reportPaymentLoading}
+                disabled={createPaymentLoading}
               >
-                Reportar
+                Crear
               </Button>
             </div>
           </Form>

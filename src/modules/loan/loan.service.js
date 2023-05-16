@@ -87,6 +87,94 @@ class LoanService {
     };
   }
 
+  async disburse({ uid = undefined, comment = undefined, disbursementDate = undefined }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/loan-disburse`,
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        uid,
+        comment,
+        disbursementDate,
+      },
+    });
+
+    return {
+      ...data,
+      message: "so far so good",
+    };
+  }
+
+  async review({ uid = undefined, comment = undefined }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/loan-review`,
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        uid,
+        comment,
+      },
+    });
+
+    return {
+      ...data,
+      message: "so far so good"
+    };
+
+  }
+
+  async reject({ uid = undefined, comment = undefined }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/loan-reject`,
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        uid,
+        comment,
+      },
+    });
+
+    return {
+      ...data,
+      message: "so far so good"
+    };
+
+  }
+
+  async approve({ uid = undefined, comment = undefined }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loans/loan-approve`,
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        uid,
+        comment,
+      },
+    });
+
+    return {
+      ...data,
+      message: "so far so good"
+    };
+
+  }
+
   async getOverview() {
     const token = await getIdTokenFromCurrentUser();
 

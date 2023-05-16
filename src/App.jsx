@@ -21,12 +21,16 @@ import Home from "./modules/main/views/Home";
 import Users from "./modules/user/views/Users";
 
 import Borrower from "./modules/borrower/views/Borrower";
-import BorrowerLoans from "./modules/loan/views/BorrowerLoans";
 
+import BorrowerLoans from "./modules/loan/views/BorrowerLoans";
 import Loan from "./modules/loan/views/Loan";
+import ReviewLoan from "./modules/loan/views/ReviewLoan";
+import RejectLoan from "./modules/loan/views/RejectLoan";
+import ApproveLoan from "./modules/loan/views/ApproveLoan";
+import DisburseLoan from "./modules/loan/views/DisburseLoan";
 
 import LoanMovements from "./modules/movement/views/LoanMovements";
-import CreatePayment from "./modules/movement/CreatePayment";
+import CreatePayment from "./modules/movement/views/CreatePayment";
 
 import BorrowerLoanCreate from "./modules/borrower/views/BorrowerLoanCreate";
 import BorrowerLoan from "./modules/borrower/views/BorrowerLoan";
@@ -79,14 +83,17 @@ const App = () => {
                 <Route path="/Users" element={<Users />} />
 
                 <Route path="/borrowers/:uid" element={<Borrower />} />
+                
                 <Route
                   path="/borrowers/:uid/loans"
                   element={<BorrowerLoans />}
                 />
-
                 <Route path="/loans/:uid" element={<Loan />} />
-
                 <Route path="/loans/:uid/movements" element={<LoanMovements />} />
+                <Route path="/loans/:uid/review" element={<ReviewLoan />} />
+                <Route path="/loans/:uid/reject" element={<RejectLoan />} />
+                <Route path="/loans/:uid/approve" element={<ApproveLoan />} />
+                <Route path="/loans/:uid/disburse" element={<DisburseLoan />} />
 
                 <Route path="/loans/:uid/payment" element={<CreatePayment />} />
 

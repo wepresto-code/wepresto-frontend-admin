@@ -386,14 +386,14 @@ const Loan = () => {
                         label="Review the loan"
                         iconDescription="Review the loan"
                         renderIcon={Review}
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate(`/loans/${uid}/review`)}
                         className="screen__centered_button"
                       >
                         Review
                       </Button>
                     </div>
                   )}
-                  {loan.status === environment.REVIEWED_LOAN_STATUS && (
+                  {loan.status === environment.REVIEWING_LOAN_STATUS && (
                     <div className="cds--col screen__centered_button_container">
                       <Button
                         kind="ghost"
@@ -401,14 +401,14 @@ const Loan = () => {
                         label="Reject the loan"
                         iconDescription="Reject the loan"
                         renderIcon={Close}
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate(`/loans/${uid}/reject`)}
                         className="screen__centered_button"
                       >
                         Reject
                       </Button>
                     </div>
                   )}
-                  {loan.status === environment.REVIEWED_LOAN_STATUS && (
+                  {loan.status === environment.REVIEWING_LOAN_STATUS && (
                     <div className="cds--col screen__centered_button_container">
                       <Button
                         kind="ghost"
@@ -416,7 +416,7 @@ const Loan = () => {
                         label="Approve the loan"
                         iconDescription="Approve the loan"
                         renderIcon={Checkmark}
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate(`/loans/${uid}/approve`)}
                         className="screen__centered_button"
                       >
                         Approve
@@ -431,7 +431,7 @@ const Loan = () => {
                         label="Report payment"
                         iconDescription="Report payment"
                         renderIcon={Finance}
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate(`/loans/${uid}/disburse`)}
                         className="screen__centered_button"
                       >
                         Disburse
