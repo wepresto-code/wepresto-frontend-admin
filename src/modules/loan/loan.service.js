@@ -22,7 +22,7 @@ class LoanService {
       },
     });
 
-    const { count, data: loans } = data;
+    const { count, loans } = data;
 
     return {
       count,

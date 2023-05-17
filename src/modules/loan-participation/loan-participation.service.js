@@ -39,6 +39,28 @@ class LoanParticipationService {
       })),
     };
   }
+
+  async create({ lenderUid, loanUid, amount }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}loan-participations`,
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        lenderUid,
+        loanUid,
+        amount,
+      },
+    });
+
+    return {
+      ...data,
+      message: "Loan participation created successfully",
+    };
+  }
 }
 
 const loanParticipationService = new LoanParticipationService();

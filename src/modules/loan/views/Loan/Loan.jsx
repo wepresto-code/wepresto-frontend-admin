@@ -149,7 +149,7 @@ const Loan = () => {
                     <p className="screen__label">ID</p>
                     <p>{loan?.id}</p>
                   </div>
-                  <div className="cds--col-lg-2 cds--col-sm-4">
+                  <div className="cds--col-lg-4 cds--col-sm-4">
                     <p className="screen__label">UID</p>
                     <p>{loan?.uid}</p>
                   </div>
@@ -185,7 +185,7 @@ const Loan = () => {
                     <p className="screen__label">Status</p>
                     <p>{loan?.status}</p>
                   </div>
-                  <div className="cds--col-lg-14 cds--col-sm-4">
+                  <div className="cds--col-lg-12 cds--col-sm-4">
                     <p className="screen__label">Comment</p>
                     <p>{loan?.comment ? loan?.comment : "-"}</p>
                   </div>

@@ -165,7 +165,7 @@ const LenderLoanParticipations = () => {
                     iconDescription="Create"
                     size="sm"
                     renderIcon={Add}
-                    onClick={() => navigate("/home")}
+                    onClick={() => navigate(`/lenders/${uid}/loan-participations/create`)}
                     style={{
                       width: "inherit",
                       marginBottom: "0.05rem",
