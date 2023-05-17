@@ -29,6 +29,10 @@ import RejectLoan from "./modules/loan/views/RejectLoan";
 import ApproveLoan from "./modules/loan/views/ApproveLoan";
 import DisburseLoan from "./modules/loan/views/DisburseLoan";
 
+import Lender from "./modules/lender/views/Lender";
+
+import LenderLoanParticipations from "./modules/loan-participation/views/LenderLoanParticipations";
+
 import LoanMovements from "./modules/movement/views/LoanMovements";
 import CreatePayment from "./modules/movement/views/CreatePayment";
 
@@ -82,20 +86,22 @@ const App = () => {
 
                 <Route path="/Users" element={<Users />} />
 
-                <Route path="/borrowers/:uid" element={<Borrower />} />
-                
+                <Route path="/borrowers/:uid" element={<Borrower />} />                
                 <Route
                   path="/borrowers/:uid/loans"
                   element={<BorrowerLoans />}
                 />
+
                 <Route path="/loans/:uid" element={<Loan />} />
                 <Route path="/loans/:uid/movements" element={<LoanMovements />} />
                 <Route path="/loans/:uid/review" element={<ReviewLoan />} />
                 <Route path="/loans/:uid/reject" element={<RejectLoan />} />
                 <Route path="/loans/:uid/approve" element={<ApproveLoan />} />
                 <Route path="/loans/:uid/disburse" element={<DisburseLoan />} />
-
                 <Route path="/loans/:uid/payment" element={<CreatePayment />} />
+
+                <Route path="/lenders/:uid" element={<Lender />} />
+                <Route path="/lenders/:uid/loan-participations" element={<LenderLoanParticipations />} />
 
                 <Route
                   path="/borrowers/:authUid/loans/create"
