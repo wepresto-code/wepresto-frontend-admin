@@ -129,11 +129,15 @@ const Lender = () => {
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Created at</p>
-                    <p>{formatDate(new Date(lender?.user?.createdAt), "UTC")}</p>
+                    <p>
+                      {formatDate(new Date(lender?.user?.createdAt), "UTC")}
+                    </p>
                   </div>
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">Updated at</p>
-                    <p>{formatDate(new Date(lender?.user?.updatedAt), "UTC")}</p>
+                    <p>
+                      {formatDate(new Date(lender?.user?.updatedAt), "UTC")}
+                    </p>
                   </div>
                   <div
                     className="cds--col-lg-16 cds--col-sm-4"
@@ -162,12 +166,29 @@ const Lender = () => {
                       label="Ver los préstamos"
                       iconDescription="Ver los préstamos"
                       renderIcon={List}
-                      onClick={() => navigate(`/lenders/${uid}/loan-participations`)}
+                      onClick={() =>
+                        navigate(`/lenders/${uid}/loan-participations`)
+                      }
                       className="screen__centered_button"
                     >
                       Loan participations
                     </Button>
                   </div>
+                  <div className="cds--col screen__centered_button_container">
+                      <Button
+                        kind="ghost"
+                        size="sm"
+                        label=""
+                        iconDescription=""
+                        renderIcon={List}
+                        onClick={() =>
+                          navigate(`/lenders/${uid}/withdrawals`)
+                        }
+                        className="screen__centered_button"
+                      >
+                        Withdrawals
+                      </Button>
+                    </div>
                 </div>
               </div>
             </>
