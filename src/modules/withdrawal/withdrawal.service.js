@@ -5,7 +5,7 @@ import environment from "../../environment";
 import { getIdTokenFromCurrentUser } from "../../utils";
 
 class WithdrawalService {
-  async getLenderParticipations({
+  async getLenderWithdrawals({
     lenderUid = undefined,
     startAmount = undefined,
     endAmount = undefined,
@@ -37,6 +37,42 @@ class WithdrawalService {
         ...loan,
         id: "" + loan.id,
       })),
+    };
+  }
+
+  async getOne({ uid }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const { data } = await axios({
+      url: `${environment.API_URL}withdrawals/${uid}`,
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return data;
+  }
+
+  async complete ({ uid, file }) {
+    const token = await getIdTokenFromCurrentUser();
+
+    const formData = new FormData();
+    formData.append("uid", uid);
+    if (file) formData.append("file", file);
+
+    const { data } = await axios({
+      url: `${environment.API_URL}withdrawals/withdrawal-complete`,
+      method: "PATCH",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: formData,
+    });
+
+    return {
+      ...data,
+      message: "Withdrawal completed successfully",
     };
   }
 }

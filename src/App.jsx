@@ -1,9 +1,9 @@
+import "./app.scss";
+
 import React, { useState } from "react";
 import { Content, Theme, InlineLoading } from "@carbon/react";
 import { Routes, Route } from "react-router-dom";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-
-import "./app.scss";
 
 import firebaseApp from "./firebase";
 
@@ -11,7 +11,6 @@ import { delay } from "./utils";
 
 import AppHeader from "./components/AppHeader";
 
-// import Landing from "./modules/main/views/Landing";
 
 import Login from "./modules/auth/views/Login";
 import ResetPassword from "./modules/auth/views/ResetPassword";
@@ -37,14 +36,8 @@ import Lender from "./modules/lender/views/Lender";
 import LenderLoanParticipations from "./modules/loan-participation/views/LenderLoanParticipations";
 import CreateLenderLoanParticipation from "./modules/loan-participation/views/CreateLenderLoanParticipation";
 
-import BorrowerLoanCreate from "./modules/borrower/views/BorrowerLoanCreate";
-import BorrowerLoan from "./modules/borrower/views/BorrowerLoan";
-import BorrowerLoanMovements from "./modules/borrower/views/BorrowerLoanMovements";
-import BorrowerLoanPayment from "./modules/borrower/views/BorrowerLoanPayment";
-import BorrowerLoanRequests from "./modules/borrower/views/BorrowerLoanRequests";
-import BorrowerLoanRequest from "./modules/borrower/views/BorrowerLoanRequest";
-
 import LenderWithdrawals from "./modules/withdrawal/views/LenderWithdrawals";
+import WithdrawalPage from "./modules/withdrawal/views/Withdrawal";
 
 export const GlobalContext = React.createContext();
 
@@ -106,34 +99,11 @@ const App = () => {
                 <Route path="/lenders/:uid" element={<Lender />} />
                 <Route path="/lenders/:uid/loan-participations" element={<LenderLoanParticipations />} />
                 <Route path="/lenders/:uid/loan-participations/create" element={<CreateLenderLoanParticipation />} />
-
                 <Route path="/lenders/:uid/withdrawals/" element={<LenderWithdrawals />} />
 
+                <Route path="/withdrawals/:uid" element={<WithdrawalPage />} />
 
-                <Route
-                  path="/borrowers/:authUid/loans/create"
-                  element={<BorrowerLoanCreate />}
-                />
-                <Route
-                  path="/borrowers/:authUid/loans/:loanUid"
-                  element={<BorrowerLoan />}
-                />
-                <Route
-                  path="/borrowers/:authUid/loans/:loanUid/movements"
-                  element={<BorrowerLoanMovements />}
-                />
-                <Route
-                  path="/borrowers/:authUid/loans/:loanUid/report-payment"
-                  element={<BorrowerLoanPayment />}
-                />
-                <Route
-                  path="/borrowers/:authUid/loan-requests"
-                  element={<BorrowerLoanRequests />}
-                />
-                <Route
-                  path="/borrowers/:authUid/loan-requests/:loanRequestUid"
-                  element={<BorrowerLoanRequest />}
-                />
+                
               </Routes>
             </Content>
           </>

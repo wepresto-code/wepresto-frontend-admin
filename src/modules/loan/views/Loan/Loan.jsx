@@ -143,7 +143,7 @@ const Loan = () => {
           {!loanLoading && !loanError && loan && (
             <>
               <h3 className="screen__heading">Loan Details</h3>
-              <div style={{ marginBottom: "1rem" }}>
+              <div>
                 <div className="cds--row">
                   <div className="cds--col-lg-2 cds--col-sm-4">
                     <p className="screen__label">ID</p>

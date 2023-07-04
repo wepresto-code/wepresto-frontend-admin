@@ -83,7 +83,7 @@ const LenderWithdrawals = () => {
             label="View"
             renderIcon={View}
             iconDescription="View"
-            onClick={() => navigate(`/loans/${row.uid}`)}
+            onClick={() => navigate(`/withdrawals/${row.uid}`)}
           />
         ),
       };
@@ -100,7 +100,7 @@ const LenderWithdrawals = () => {
 
     try {
       const [{ count, withdrawals }] = await Promise.all([
-        withdrawalService.getLenderParticipations({
+        withdrawalService.getLenderWithdrawals({
           lenderUid,
           startAmount,
           endAmount,

@@ -227,11 +227,6 @@ class LoanService {
   }
 
   async getEpaycoTrasaction({ ePaycoRef }) {
-    // eslint-disable-next-line no-console
-    console.log(
-      `https://secure.epayco.co/validation/v1/reference/${ePaycoRef}`
-    );
-
     const { data } = await axios({
       url: `https://secure.epayco.co/validation/v1/reference/${ePaycoRef}`,
       method: "GET",
