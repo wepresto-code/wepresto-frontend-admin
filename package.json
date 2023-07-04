@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@carbon/icons-react": "11.21.0",
-    "@carbon/react": "1.31.0",
+    "@carbon/react": "1.32.0",
     "axios": "1.4.0",
     "core-js": "3.31.0",
     "firebase": "9.22.2",
