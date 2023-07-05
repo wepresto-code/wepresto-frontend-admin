@@ -6,6 +6,7 @@ import {
   IconButton,
   Search,
   Button,
+  Tag,
 } from "@carbon/react";
 import { View } from "@carbon/icons-react";
 
@@ -82,6 +83,14 @@ const Users = () => {
 
       return {
         ...row,
+        type: (
+          <Tag
+            type={row.isOverdue ? "red" : "gray"}
+            style={{ width: "max-content" }}
+          >
+            {row?.type}
+          </Tag>
+        ),
 
         actions: (
           <IconButton
@@ -144,7 +153,7 @@ const Users = () => {
               <div className="cds--row">
                 <div className="cds--col-lg-14 cds--col-sm-2">
                   <Search
-                    placeholder="Find your items"
+                    placeholder="Find your users"
                     labelText="Search"
                     closeButtonLabelText="Clear search input"
                     id="search-1"
