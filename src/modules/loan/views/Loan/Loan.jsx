@@ -428,8 +428,23 @@ const Loan = () => {
                       <Button
                         kind="ghost"
                         size="sm"
-                        label="Report payment"
-                        iconDescription="Report payment"
+                        label="Fund the loan"
+                        iconDescription="Fund the loan"
+                        renderIcon={Finance}
+                        onClick={() => navigate(`/loans/${uid}/fund`)}
+                        className="screen__centered_button"
+                      >
+                        Fund
+                      </Button>
+                    </div>
+                  )}
+                  {loan.status === environment.FUNDING_LOAN_STATUS && (
+                    <div className="cds--col screen__centered_button_container">
+                      <Button
+                        kind="ghost"
+                        size="sm"
+                        label="Disburse the loan"
+                        iconDescription="Disburse the loan"
                         renderIcon={Finance}
                         onClick={() => navigate(`/loans/${uid}/disburse`)}
                         className="screen__centered_button"
