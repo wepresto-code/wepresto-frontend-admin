@@ -1,6 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { InlineNotification, Form, TextInput, Button } from "@carbon/react";
+import {
+  InlineNotification,
+  Form,
+  TextInput,
+  Button,
+  ComboBox,
+} from "@carbon/react";
 
 import loanParticipationService from "../../loan-participation.service";
 import lenderService from "../../../lender/lender.service";
@@ -12,7 +18,6 @@ import { formatCurrency } from "../../../../utils/format-currency";
 import BackButton from "../../../../components/BackButton";
 
 import { GlobalContext } from "../../../../App.jsx";
-import { isValidUUID } from "../../../../utils/is-valid-uuid";
 
 const CreateLenderLoanParticipation = () => {
   const [amount, setAmount] = useState(undefined);
@@ -21,6 +26,7 @@ const CreateLenderLoanParticipation = () => {
   const [invalidLoanUid, setInvalidLoanUid] = useState(false);
   const [lender, setLender] = useState(undefined);
   const [loan, setLoan] = useState(undefined);
+  const [loans, setLoans] = useState([]);
 
   const [createLoanParticipationLoading, setCreateLoanParticipationLoading] =
     useState(false);
@@ -50,37 +56,32 @@ const CreateLenderLoanParticipation = () => {
     setCreateLoanParticipationLoading(false);
   };
 
+  const fetchLoans = async () => {
+    setCreateLoanParticipationLoading(true);
+
+    try {
+      const { loans } = await loanService.getLoansNeedingFunding({
+        take: 100,
+        skip: 0,
+      });
+      setLoans(loans);
+    } catch (error) {
+      setCreateLoanParticipationError(getMessageFromAxiosError(error));
+    }
+  };
   useEffect(() => {
     if (!user) {
       return navigate("/");
     }
 
     fetchLender({ uid });
+    fetchLoans();
   }, [navigate, user, uid]);
 
-  const fetchLoan = async ({ uid }) => {
-    setCreateLoanParticipationLoading(true);
+  const handleLoanUidChange = ({ selectedItem }) => {
+    setLoanUid(selectedItem?.uid);
 
-    try {
-      const loan = await loanService.getOne({ uid });
-
-      setLoan(loan);
-    } catch (error) {
-      setCreateLoanParticipationError(getMessageFromAxiosError(error));
-    }
-
-    setCreateLoanParticipationLoading(false);
-  };
-
-  const handleLoanUidChange = (event) => {
-    const { value } = event.target;
-
-    setLoanUid(value);
-
-    // check if the value is a valid loan uid
-    if (isValidUUID(value)) {
-      fetchLoan({ uid: value });
-    }
+    setLoan(selectedItem);
   };
 
   const handleCreateLoanParticipationSubmit = async (event) => {
@@ -157,13 +158,20 @@ const CreateLenderLoanParticipation = () => {
               <p>{formatCurrency(amount, "COP")}</p>
             </div>
             <div style={{ marginBottom: "1rem" }}>
-              <TextInput
-                id="text-input-loan-uid"
-                labelText="Loan UID"
+              <ComboBox
+                id="loans-combobox"
+                items={loans}
+                onChange={handleLoanUidChange}
+                downshiftProps={{
+                  onStateChange: () => {
+                    // eslint-disable-next-line no-console
+                    console.log("the state has changed");
+                  },
+                }}
+                itemToString={(item) => (item ? item.uid : "")}
+                titleText="Loan"
                 invalid={invalidLoanUid}
                 invalidText="Invalid value"
-                onChange={handleLoanUidChange}
-                autoComplete="off"
               />
             </div>
             {loan && (
@@ -174,7 +182,15 @@ const CreateLenderLoanParticipation = () => {
                 </div>
                 <div className="cds--col-lg-8 cds--col-sm-4">
                   <p className="screen__label">Loan Amount</p>
-                  <p>{formatCurrency(loan.amount, "COP")}</p>
+                  <p>{formatCurrency(loan?.amount, "COP")}</p>
+                </div>
+                <div className="cds--col-lg-8 cds--col-sm-4">
+                  <p className="screen__label">Funded Amount</p>
+                  <p>{formatCurrency(loan?.fundedAmount, "COP")}</p>
+                </div>
+                <div className="cds--col-lg-8 cds--col-sm-4">
+                  <p className="screen__label">Remaining Amount</p>
+                  <p>{formatCurrency(loan?.remainingAmount, "COP")}</p>
                 </div>
               </div>
             )}
@@ -211,7 +227,7 @@ const CreateLenderLoanParticipation = () => {
                 size="sm"
                 disabled={createLoanParticipationLoading}
               >
-                Crear
+                Create
               </Button>
             </div>
           </Form>

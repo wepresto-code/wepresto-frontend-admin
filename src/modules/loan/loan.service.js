@@ -2,7 +2,7 @@ import axios from "axios";
 
 import environment from "../../environment";
 
-import { getIdTokenFromCurrentUser, addMinutes } from "../../utils";
+import { getIdTokenFromCurrentUser } from "../../utils";
 
 class LoanService {
   async getBorrowerLoans({ borrowerUid = undefined, q = undefined, take = undefined, skip = undefined }) {
@@ -197,37 +197,31 @@ class LoanService {
     };
   }
 
-  async getOverview() {
+  async getLoansNeedingFunding({ take, skip }) {
     const token = await getIdTokenFromCurrentUser();
 
     const { data } = await axios({
-      url: `${environment.API_URL}loans/overview`,
+      url: `${environment.API_URL}loans/needing-funding`,
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    });
-
-    return {
-      ...data,
-    };
-  }
-
-  async getLoanDetails({ uid }) {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}loans/details/${uid}`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
+      params: {
+        take,
+        skip,
       },
     });
 
+    const { count, loans } = data;
+
     return {
-      ...data,
-      loanPaymentDate: addMinutes(data.loanPaymentDate, 5 * 60),
+      count,
+      loans: loans.map((loan) => ({
+        ...loan,
+        id: "" + loan.id,
+      })),
     };
+
   }
 
   async createEpaycoTransaction({ uid, amount }) {
@@ -302,78 +296,6 @@ class LoanService {
     };
 
     return data;
-  }
-
-  async getBorrowers() {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}loans/admin/borrowers`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return data.map((item) => {
-      return {
-        ...item,
-        id: item.id + "",
-      };
-    });
-  }
-
-  async getTotalBorrowedPerMonth() {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}loans/admin/total-borrowed-per-month`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return data;
-  }
-
-  async getTotalByTypes() {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}loans/admin/total-by-types`,
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return data;
-  }
-
-  async createLoan({ userAuthUid, amount, monthlyInterestRate, monthlyInterestOverdueRate, startDate, description }) {
-    const token = await getIdTokenFromCurrentUser();
-
-    const { data } = await axios({
-      url: `${environment.API_URL}loans`,
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      data: {
-        userAuthUid,
-        amount,
-        monthlyInterestRate,
-        monthlyInterestOverdueRate,
-        startDate,
-        description,
-      },
-    });
-
-    return {
-      ...data,
-      message: "Préstamo creado exitosamente",
-    };
   }
 }
 
